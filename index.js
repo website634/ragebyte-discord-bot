@@ -35,19 +35,22 @@ const ALLOWED_LINK_DOMAINS = ['ragebyte.xyz', 'discord.gg/ragebyte'];
 const userMsgTimes = new Map();
 
 async function forward(payload) {
+  const url = `${process.env.SUPABASE_URL}/functions/v1/discord-bot-realtime`;
   try {
-    const r = await fetch(`${EDGE}/discord-bot-realtime`, {
+    const r = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ANON}` },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+        'apikey': process.env.SUPABASE_ANON_KEY,
+      },
       body: JSON.stringify(payload),
     });
-    if (!r.ok) {
-      console.error(`edge ${r.status}`);
-      return null;
-    }
-    return await r.json();
+    const text = await r.text();
+    console.log(`[forward] ${payload.type} -> ${r.status} ${text.slice(0,200)}`);
+    return text ? JSON.parse(text) : null;
   } catch (e) {
-    console.error('forward error:', e.message);
+    console.error(`[forward] ${payload.type} FAILED:`, e.message);
     return null;
   }
 }
