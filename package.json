@@ -3,8 +3,12 @@
   "version": "2.0.0",
   "description": "RageByte 24/7 Discord bot — real-time transcripts, AI auto-reply, presence, voice, auto-mod",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js"
+  },
+  "engines": {
+    "node": "20.x"
   },
   "dependencies": {
     "discord.js": "^14.14.1",
