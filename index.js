@@ -96,6 +96,28 @@ client.on(Events.MessageCreate, async (message) => {
   const staff = isStaffMember(member);
   const ticket = isTicketChannel(message.channel);
 
+if (data?.autoReply) {
+  await message.channel.send(data.autoReply);
+}
+
+// NEW — execute returned slash-command action:
+if (data?.action?.type === "command") {
+  const name = data.action.name; // "loader" | "setup" | "status"
+  const handler = commandHandlers[name]; // your existing /loader, /setup, /status handlers
+  if (handler) {
+    try {
+      // Build a minimal fake interaction OR just call the handler's core logic directly.
+      // Easiest: reuse the same channel.send used by your slash command body.
+      await handler({ channel: message.channel, user: message.author, guild: message.guild });
+    } catch (e) {
+      console.error("auto-command failed:", name, e);
+    }
+  }
+}
+
+
+  
+
   // ---- Auto-mod (only for non-staff, non-bot) ----
   if (!message.author.bot && !staff) {
     // Spam rate-limit
