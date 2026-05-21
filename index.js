@@ -88,6 +88,7 @@ client.once(Events.ClientReady, async () => {
 // ---------- messageCreate (transcripts + AI auto-reply + auto-mod) ----------
 client.on(Events.MessageCreate, async (message) => {
   if (!message.guild) return;
+  console.log(`[msg] #${message.channel.name} <${message.author.tag}>: ${message.content?.slice(0, 80)}`);
   const member = message.member;
   const staff = isStaffMember(member);
   const ticket = isTicketChannel(message.channel);
