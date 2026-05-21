@@ -1,15 +1,11 @@
 {
   "name": "ragebyte-discord-bot",
   "version": "2.0.0",
-  "description": "RageByte 24/7 Discord bot — real-time transcripts, AI auto-reply, presence, voice, auto-mod",
+  "description": "RageByte 24/7 Discord bot",
   "main": "index.js",
   "type": "module",
-  "scripts": {
-    "start": "node index.js"
-  },
-  "engines": {
-    "node": "20.x"
-  },
+  "scripts": { "start": "node index.js" },
+  "engines": { "node": "20.x" },
   "dependencies": {
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
