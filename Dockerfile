@@ -1,6 +1,4 @@
-FROM node:20-alpine
-
-RUN apk add --no-cache python3 make g++ opus-dev
+FROM node:20-slim
 
 WORKDIR /app
 
