@@ -211,6 +211,21 @@ client.on(Events.MessageCreate, async (message) => {
     // ---- Forward to edge for transcript + AI ----
     if (message.author.bot && message.author.id !== client.user.id) return;
 
+    // Detect @mention of the bot
+    const mentionsBot = message.mentions.users.has(client.user.id);
+
+    // Detect reply to the bot
+    let repliedToBot = false;
+    if (message.reference?.messageId) {
+      try {
+        const ref = await message.channel.messages.fetch(message.reference.messageId);
+        repliedToBot = ref?.author?.id === client.user.id;
+      } catch {}
+    }
+
+    // Author's role names (for Owner-only casual chat gating)
+    const authorRoleNames = member?.roles?.cache?.map(r => r.name) ?? [];
+
     const data = await forward({
       type: 'messageCreate',
       messageId: message.id,
@@ -223,10 +238,27 @@ client.on(Events.MessageCreate, async (message) => {
       isBot: message.author.bot,
       isStaff: staff,
       timestamp: message.createdTimestamp,
+      mentionsBot,
+      repliedToBot,
+      authorRoleNames,
     });
 
-    // ---- AI auto-reply ----
-    if (data?.autoReply && ticket && !staff && !message.author.bot) {
+    // ---- Casual chat reply (Owner @mention / reply, any channel) ----
+    if (data?.autoReply && data?.mode === 'casual') {
+      try {
+        await message.channel.sendTyping();
+        setTimeout(async () => {
+          try {
+            await message.reply({
+              content: data.autoReply,
+              allowedMentions: { repliedUser: true },
+            });
+          } catch (e) { console.error('casual reply send:', e.message); }
+        }, 1200);
+      } catch (e) { console.error('typing:', e.message); }
+    }
+    // ---- AI support auto-reply (ticket channels only) ----
+    else if (data?.autoReply && ticket && !staff && !message.author.bot) {
       try {
         await message.channel.sendTyping();
         setTimeout(async () => {
