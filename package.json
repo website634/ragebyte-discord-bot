@@ -1,13 +1,17 @@
 {
   "name": "ragebyte-discord-bot",
-  "version": "1.0.0",
-  "description": "24/7 Discord bot for RageByte - forwards events to Lovable Cloud edge functions",
+  "version": "2.0.0",
+  "description": "RageByte 24/7 Discord bot — real-time transcripts, AI auto-reply, presence, voice, auto-mod",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
     "discord.js": "^14.14.1",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "@discordjs/voice": "^0.16.1",
+    "@discordjs/opus": "^0.9.0",
+    "sodium-native": "^4.0.4",
+    "libsodium-wrappers": "^0.7.13"
   }
 }
