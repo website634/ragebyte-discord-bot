@@ -1,0 +1,13 @@
+{
+  "name": "ragebyte-discord-bot",
+  "version": "1.0.0",
+  "description": "24/7 Discord bot for RageByte - forwards events to Lovable Cloud edge functions",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.3.1"
+  }
+}
